@@ -27,7 +27,7 @@ def build_index(root):
         # add(lev3, "./...") for each file in this folder
         for fname in filenames:
             full_path = os.path.join(root, rel_dir, fname)
-            rel_path = "./" + full_path.replace("\\", "/")
+            rel_path = full_path.replace("\\", "/")
             result[key].append((lev3, rel_path))
 
     # for stable output sort tuples by(lev3, rel_path)

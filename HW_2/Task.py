@@ -232,3 +232,46 @@ def load_records_from_dir(directory_path):
                 records.add(record)
 
     return records
+
+
+def main():
+    """
+    Load all EV data and run example analyses.
+
+    This function:
+        1. Reads records from the 'cars' folder.
+        2. Sums values for Australia (percent) from 2012 to 2015.
+        3. Counts EV sales BEV records in Vehicles with value < 1.
+    """
+    current_dir = os.path.dirname(__file__)
+    cars_dir = os.path.join(current_dir, "cars")
+
+    records = load_records_from_dir(cars_dir)
+    print("Loaded records:", len(records))
+
+    # Task7 part1: analyze by (region, unit, year)
+    total_australia_percent = EVRecord.analyze_sales_by_region_year(
+        records,
+        region="Australia",
+        unit="percent",
+        start_year=2012,
+        end_year=2015,
+    )
+    print("Total value in Australia (percent) 2012–2015:", total_australia_percent)
+
+    # Task7 part2: analyze by (parameter, powertrain, unit, value)
+    small_bev_sales_count = EVRecord.count_entries_with_value_less_than(
+        records,
+        parameter="EV sales",
+        powertrain="BEV",
+        unit="Vehicles",
+        max_value=1.0,
+    )
+    print(
+        "Number of EV sales BEV records in Vehicles with value < 1:",
+        small_bev_sales_count,
+    )
+
+
+if __name__ == "__main__":
+    main()

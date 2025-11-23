@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+import os
 
 
 class BaseRecord(ABC):
@@ -33,7 +34,7 @@ class BaseRecord(ABC):
         """
         Return a short human readable description of record.
 
-        Must be implemented in subclasses.
+        Must be implemnted in subclasses.
         """
         pass
 
@@ -182,3 +183,52 @@ class EVRecord(BaseRecord):
             ):
                 count += 1
         return count
+
+
+def load_records_from_dir(directory_path):
+    """
+    Read all data files from the given directory and create EVRecord objects.
+
+    Args:
+        directory_path (str): Path to the folder with part_00, part_01, ...
+
+    Returns:
+        set: Set of EVRecord instances.
+    """
+    records = set()
+
+    for filename in sorted(os.listdir(directory_path)):
+        if not filename.startswith("part_"):
+            continue
+
+        full_path = os.path.join(directory_path, filename)
+
+        with open(full_path, "r", encoding="utf-8") as f:
+            for line in f:
+                line = line.strip()
+                if not line:
+                    continue
+
+                parts = line.split("#@#")
+                if len(parts) != 6:
+                    # skip the lines that are broken
+                    continue
+
+                region = parts[0].strip()
+                parameter = parts[1].strip()
+                powertrain = parts[2].strip()
+                year_str = parts[3].strip()
+                unit = parts[4].strip()
+                value_str = parts[5].strip()
+
+                try:
+                    year = int(year_str)
+                    value = float(value_str)
+                except ValueError:
+                    # skip lines of the invalid numbers
+                    continue
+
+                record = EVRecord(region, parameter, powertrain, year, unit, value)
+                records.add(record)
+
+    return records

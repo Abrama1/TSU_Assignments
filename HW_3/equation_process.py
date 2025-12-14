@@ -32,6 +32,21 @@ def build_expanded_matrix(filename):
     return np.array(rows, dtype=float)
 
 
+def cramer_determinants_from_expanded(E):
+    n = E.shape[0]
+    A = E[:, :n]
+    B = E[:, n]
+    detA = float(np.linalg.det(A))
+
+    detAi = []
+    for i in range(n):
+        Ai = A.copy()
+        Ai[:, i] = B
+        detAi.append(float(np.linalg.det(Ai)))
+
+    return detA, detAi
+
+
 class EquationProcess(Process):
     def __init__(self, filename):
         super().__init__()

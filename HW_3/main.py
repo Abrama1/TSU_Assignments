@@ -16,14 +16,25 @@ def main():
     if not files:
         return
 
-    p = EquationProcess(files[0])
-    p.start()
-    p.join()
+    procs = []
+    for fn in files:
+        p = EquationProcess(fn)
+        p.start()
+        procs.append(p)
 
-    out_name = files[0] + ".out"
-    with open(out_name, "r") as f:
-        print(files[0])
-        print(f.read().strip())
+    for p in procs:
+        p.join()
+
+    results = {}
+    for fn in files:
+        out_name = fn + ".out"
+        try:
+            with open(out_name, "r") as f:
+                results[fn] = float(f.read().strip())
+        except:
+            results[fn] = float("nan")
+
+    print(len(results))
 
 
 if __name__ == "__main__":

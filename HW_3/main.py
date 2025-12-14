@@ -1,5 +1,6 @@
 import os
 from equation_process import EquationProcess
+import math
 
 
 def main():
@@ -10,8 +11,6 @@ def main():
             files.append(name)
 
     files.sort()
-
-    print(len(files))
 
     if not files:
         return
@@ -25,16 +24,22 @@ def main():
     for p in procs:
         p.join()
 
-    results = {}
+    best_file = None
+    best_norm = -1.0
+
     for fn in files:
         out_name = fn + ".out"
         try:
             with open(out_name, "r") as f:
-                results[fn] = float(f.read().strip())
+                val = float(f.read().strip())
+            if not math.isnan(val) and val > best_norm:
+                best_norm = val
+                best_file = fn
         except:
-            results[fn] = float("nan")
+            pass
 
-    print(len(results))
+    if best_file is not None:
+        print(best_file)
 
 
 if __name__ == "__main__":

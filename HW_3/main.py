@@ -1,5 +1,5 @@
 import os
-from equation_process import EquationProcess, build_expanded_matrix, cramer_determinants_from_expanded
+from equation_process import EquationProcess, solve_norm_from_file
 
 
 def main():
@@ -14,11 +14,9 @@ def main():
     print(len(files))
 
     if files:
-        e = build_expanded_matrix(files[0])
-        print(e.shape)
-        detA, detAi = cramer_determinants_from_expanded(e)
-        print(detA)
-        print(len(detAi))
+        norm = solve_norm_from_file(files[0])
+        print(files[0])
+        print(norm)
 
 
 if __name__ == "__main__":

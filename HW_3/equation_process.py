@@ -47,6 +47,21 @@ def cramer_determinants_from_expanded(E):
     return detA, detAi
 
 
+def solve_norm_from_expanded(E, eps=1e-9):
+    detA, detAi = cramer_determinants_from_expanded(E)
+
+    if abs(detA) < eps:
+        return float("nan")
+
+    X = np.array([d / detA for d in detAi], dtype=float)
+    return float(np.linalg.norm(X))
+
+
+def solve_norm_from_file(filename):
+    E = build_expanded_matrix(filename)
+    return solve_norm_from_expanded(E)
+
+
 class EquationProcess(Process):
     def __init__(self, filename):
         super().__init__()

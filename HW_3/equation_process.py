@@ -68,4 +68,7 @@ class EquationProcess(Process):
         self.filename = filename
 
     def run(self):
-        pass
+        norm = solve_norm_from_file(self.filename)
+        out_name = self.filename + ".out"
+        with open(out_name, "w") as f:
+            f.write(str(norm))

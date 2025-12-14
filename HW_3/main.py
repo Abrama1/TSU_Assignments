@@ -1,5 +1,5 @@
 import os
-from equation_process import EquationProcess, solve_norm_from_file
+from equation_process import EquationProcess
 
 
 def main():
@@ -13,10 +13,17 @@ def main():
 
     print(len(files))
 
-    if files:
-        norm = solve_norm_from_file(files[0])
+    if not files:
+        return
+
+    p = EquationProcess(files[0])
+    p.start()
+    p.join()
+
+    out_name = files[0] + ".out"
+    with open(out_name, "r") as f:
         print(files[0])
-        print(norm)
+        print(f.read().strip())
 
 
 if __name__ == "__main__":
